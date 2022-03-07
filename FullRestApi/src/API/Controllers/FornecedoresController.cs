@@ -22,24 +22,24 @@ namespace Joao.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<FornecedorDTO>>> ObterTodos()
-        {
-            var fornecedor = _mapper.Map<IEnumerable<FornecedorDTO>>(await _fornecedorRepository.ObterTodos());
-            return Ok(fornecedor);
-        }
 
         [HttpGet]
-        public async Task<FornecedorDTO> ObterFornecedorEndereço(Guid id)
+        public async Task<IEnumerable<FornecedorDTO>> ObterTodos()
+        {
+            return _mapper.Map<IEnumerable<FornecedorDTO>>(await _fornecedorRepository.ObterTodos());
+        }
+
+        
+        public async Task<FornecedorDTO> ObterFornecedorEndereco(Guid id)
         {
             return _mapper.Map<FornecedorDTO>(await _fornecedorRepository.ObterFornecedorEndereco(id));
 
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<IEnumerable<FornecedorDTO>>> ObterPorId(Guid id)
+        public async Task<ActionResult<FornecedorDTO>> ObterPorId(Guid id)
         {
-            var fornecedor = _mapper.Map<IEnumerable<FornecedorDTO>>(await _fornecedorRepository.ObterFornecedorProdutosEndereco(id));
+            var fornecedor = _mapper.Map<FornecedorDTO>(await _fornecedorRepository.ObterFornecedorEndereco(id));
             if (fornecedor == null) return NotFound();
             return Ok(fornecedor);
         }
@@ -74,7 +74,7 @@ namespace Joao.API.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Excluir(Guid id)
         {
-            var fornecedor = await ObterFornecedorEndereço(id);
+            var fornecedor = await ObterFornecedorEndereco(id);
             if (fornecedor == null) return NotFound();
 
             await _fornecedorService.Remover(id);

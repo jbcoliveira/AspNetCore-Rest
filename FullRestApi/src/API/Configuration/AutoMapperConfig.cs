@@ -14,6 +14,9 @@ namespace Joao.API.Configuration
         {
             CreateMap<Fornecedor, FornecedorDTO>().ReverseMap();
             CreateMap<Produto, ProdutoDTO>().ReverseMap();
+            CreateMap<Produto, ProdutoDTO>()
+                .ForMember(dest => dest.NomeFornecedor, opt => opt.MapFrom(src => src.Fornecedor.Nome));
+
             CreateMap<Endereco, EnderecoDTO>().ReverseMap();
         }
     }

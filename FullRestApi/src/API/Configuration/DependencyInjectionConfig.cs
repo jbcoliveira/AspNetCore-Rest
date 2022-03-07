@@ -1,4 +1,6 @@
 ﻿using Joao.Business.Intefaces;
+using Joao.Business.Notificacoes;
+using Joao.Business.Services;
 using Joao.Data.Context;
 using Joao.Data.Repository;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,9 +17,12 @@ namespace Joao.API.Configuration
         {
             services.AddScoped<MeuDbContext>();
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
-            services.AddScoped<IFornecedorRepository, FornecedorRepository>();
+            services.AddScoped<IFornecedorRepository, FornecedorRepository>();            
             services.AddScoped<IEnderecoRepository, EnderecoRepository>();
 
+            services.AddScoped<IFornecedorService, FornecedorService>();
+            services.AddScoped<INotificador, Notificador>();
+            services.AddScoped<IProdutoService, ProdutoService>();
 
 
             return services;
