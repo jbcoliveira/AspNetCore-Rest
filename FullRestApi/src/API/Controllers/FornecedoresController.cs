@@ -53,7 +53,7 @@ namespace Joao.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> ObterPorId(Guid id)
         {
-            var fornecedor = _mapper.Map<FornecedorDTO>(await _fornecedorRepository.ObterFornecedorProdutosEndereco(id));
+            var fornecedor = _mapper.Map<FornecedorDTO>(await _fornecedorRepository.ObterFornecedorEndereco(id));
             if (fornecedor == null) return NotFound();
             return Ok(fornecedor);
         }

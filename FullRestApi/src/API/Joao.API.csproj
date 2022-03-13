@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Data\Joao.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\imagens\" />
-  </ItemGroup>
-
 </Project>
