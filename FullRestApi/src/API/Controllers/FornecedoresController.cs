@@ -15,11 +15,18 @@ namespace Joao.API.Controllers
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
-        public FornecedoresController(IFornecedorRepository fornecedorRepository, IFornecedorService fornecedorService, IMapper mapper)
+        private readonly IEnderecoRepository _enderecoRepository;
+
+        public FornecedoresController(IFornecedorRepository fornecedorRepository, 
+            IFornecedorService fornecedorService, 
+            IMapper mapper,
+            INotificador notificador,
+            IEnderecoRepository enderecoRepository) : base (notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _fornecedorService = fornecedorService;
             _mapper = mapper;
+            _enderecoRepository = enderecoRepository;
         }
 
 
@@ -36,6 +43,13 @@ namespace Joao.API.Controllers
 
         }
 
+
+        [HttpGet("obter-endereco/{id:guid}")]
+        public async Task<FornecedorDTO> ObterEnderecoPorId(Guid id)
+        {
+            return _mapper.Map<FornecedorDTO>(await _enderecoRepository.ObterPorId(id));
+        }
+
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> ObterPorId(Guid id)
         {
@@ -47,39 +61,41 @@ namespace Joao.API.Controllers
         [HttpPost]
         public async Task<ActionResult<FornecedorDTO>> Adicionar(FornecedorDTO fornecedorDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorDTO);
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            
+            await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorDTO));
 
-            await _fornecedorService.Adicionar(fornecedor);
-
-            return Ok(fornecedor);
+            return CustomResponse(fornecedorDTO);
 
         }
         
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Atualizar(Guid id, FornecedorDTO fornecedorDTO)
         {
-            if (id != fornecedorDTO.Id) return BadRequest();
+            if (id != fornecedorDTO.Id) {
+                NotificarErro("O id informado não é o mesmo que foi passado na query");
+                return CustomResponse(fornecedorDTO);
+            } 
 
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid){
+                return CustomResponse(ModelState);
+            }
+            
+            await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorDTO));
 
-            var fornecedor = _mapper.Map<Fornecedor>(fornecedorDTO);
-
-            await _fornecedorService.Atualizar(fornecedor);
-
-            return Ok(fornecedor);
+            return CustomResponse(fornecedorDTO);
 
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Excluir(Guid id)
         {
-            var fornecedor = await ObterFornecedorEndereco(id);
-            if (fornecedor == null) return NotFound();
+            var fornecedorDTO = await ObterFornecedorEndereco(id);
+            if (fornecedorDTO == null) return NotFound();
 
             await _fornecedorService.Remover(id);
 
-            return Ok(fornecedor);
+            return CustomResponse();
 
         }
     }

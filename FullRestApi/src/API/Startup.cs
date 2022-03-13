@@ -38,6 +38,12 @@ namespace Joao.API
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                //Desativa validação automatica da ModelState (Personalizar erros)
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.ResolveDependencies();
         }
 
