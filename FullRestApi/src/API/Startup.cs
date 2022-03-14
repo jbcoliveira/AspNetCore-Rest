@@ -44,6 +44,16 @@ namespace Joao.API
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Development",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
             services.ResolveDependencies();
         }
 
@@ -61,6 +71,8 @@ namespace Joao.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("Development");
             app.UseMvc();
         }
     }

@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 
 /FullRestApi/src/API/wwwroot/imagens/*
+/FullRestApi/src/API/wwwroot/demo-webapi
