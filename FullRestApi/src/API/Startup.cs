@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Joao.Api.Configuration;
 using Joao.API.Configuration;
 using Joao.Data.Context;
 using Microsoft.AspNetCore.Builder;
@@ -26,38 +27,20 @@ namespace Joao.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<MeuDbContext>( options => {
+            services.AddDbContext<MeuDbContext>(options =>
+            {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                //Desativa validação automatica da ModelState (Personalizar erros)
-                options.SuppressModelStateInvalidFilter = true;
-            });
-
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("Development",
-                    builder => builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
-            });
+            services.WebApiConfig();
 
             services.ResolveDependencies();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -66,14 +49,10 @@ namespace Joao.API
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseCors("Development");
-            app.UseMvc();
+            app.UseMvcConfiguration();
         }
     }
 }

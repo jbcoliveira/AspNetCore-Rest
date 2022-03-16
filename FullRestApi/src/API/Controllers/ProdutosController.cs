@@ -10,7 +10,7 @@ using Joao.Business.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DevIO.Api.Controllers
+namespace Joao.Api.Controllers
 {
     [Route("api/produtos")]
     public class ProdutosController : MainController
@@ -47,7 +47,7 @@ namespace DevIO.Api.Controllers
             return ProdutoDTO;
         }
 
-        [HttpPost]
+        
         public async Task<ActionResult<ProdutoDTO>> Adicionar(ProdutoDTO ProdutoDTO)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -63,6 +63,7 @@ namespace DevIO.Api.Controllers
 
             return CustomResponse(ProdutoDTO);
         }
+
 
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Atualizar(Guid id, ProdutoDTO ProdutoDTO)
@@ -167,7 +168,7 @@ namespace DevIO.Api.Controllers
                 return false;
             }
 
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/app/demo-webapi/src/assets", imgPrefixo + arquivo.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\demo-webapi\\src\\assets", imgPrefixo + arquivo.FileName);
 
             if (System.IO.File.Exists(path))
             {
