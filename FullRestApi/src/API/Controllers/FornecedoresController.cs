@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Joao.API.Controllers
 {
-    [Authorize]
+
     [Route("api/[controller]")]
     public class FornecedoresController : MainController
     {
