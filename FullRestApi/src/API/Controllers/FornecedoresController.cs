@@ -2,6 +2,7 @@
 using Joao.API.DTO;
 using Joao.Business.Intefaces;
 using Joao.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Joao.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class FornecedoresController : MainController
     {
