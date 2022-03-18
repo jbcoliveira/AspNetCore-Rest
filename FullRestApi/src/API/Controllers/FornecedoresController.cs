@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Joao.Api.Extensions;
 using Joao.API.DTO;
 using Joao.Business.Intefaces;
 using Joao.Business.Models;
@@ -33,19 +34,20 @@ namespace Joao.API.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<FornecedorDTO>> ObterTodos()
         {
             return _mapper.Map<IEnumerable<FornecedorDTO>>(await _fornecedorRepository.ObterTodos());
         }
 
-        
+        [Authorize]
         public async Task<FornecedorDTO> ObterFornecedorEndereco(Guid id)
         {
             return _mapper.Map<FornecedorDTO>(await _fornecedorRepository.ObterFornecedorEndereco(id));
 
         }
 
-
+        [Authorize]
         [HttpGet("obter-endereco/{id:guid}")]
         public async Task<FornecedorDTO> ObterEnderecoPorId(Guid id)
         {
@@ -62,6 +64,7 @@ namespace Joao.API.Controllers
             return Ok(fornecedor);
         }
 
+        [ClaimsAuthorize("Fornecedor","Adicionar")]
         [HttpPost]
         public async Task<ActionResult<FornecedorDTO>> Adicionar(FornecedorDTO fornecedorDTO)
         {
@@ -73,6 +76,7 @@ namespace Joao.API.Controllers
 
         }
         
+        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         [HttpPut("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Atualizar(Guid id, FornecedorDTO fornecedorDTO)
         {
@@ -91,6 +95,7 @@ namespace Joao.API.Controllers
 
         }
 
+        [ClaimsAuthorize("Fornecedor", "Excluir")]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<FornecedorDTO>> Excluir(Guid id)
         {
