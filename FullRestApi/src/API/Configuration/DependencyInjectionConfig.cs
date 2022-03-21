@@ -1,8 +1,10 @@
-﻿using Joao.Business.Intefaces;
+﻿using Joao.Api.Extensions;
+using Joao.Business.Intefaces;
 using Joao.Business.Notificacoes;
 using Joao.Business.Services;
 using Joao.Data.Context;
 using Joao.Data.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -24,6 +26,9 @@ namespace Joao.API.Configuration
             services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IProdutoService, ProdutoService>();
 
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUser, AspNetUser>();
 
             return services;
         }
