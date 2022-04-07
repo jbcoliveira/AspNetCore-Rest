@@ -34,23 +34,17 @@ namespace Joao.Api.V1.Controllers
             _enderecoRepository = enderecoRepository;
         }
 
-
+        //[Authorize]  
         [HttpGet]
-        //[Authorize]
         public async Task<IEnumerable<FornecedorDTO>> ObterTodos()
         {
             return _mapper.Map<IEnumerable<FornecedorDTO>>(await _fornecedorRepository.ObterTodos());
         }
 
-        [Authorize]
-        public async Task<FornecedorDTO> ObterFornecedorEndereco(Guid id)
-        {
-            return _mapper.Map<FornecedorDTO>(await _fornecedorRepository.ObterFornecedorEndereco(id));
 
-        }
 
         [Authorize]
-        [HttpGet("obter-endereco/{id:guid}")]
+        [HttpGet("endereco/{id:guid}")]
         public async Task<FornecedorDTO> ObterEnderecoPorId(Guid id)
         {
             return _mapper.Map<FornecedorDTO>(await _enderecoRepository.ObterPorId(id));
@@ -107,6 +101,13 @@ namespace Joao.Api.V1.Controllers
             await _fornecedorService.Remover(id);
 
             return CustomResponse();
+
+        }
+
+       
+        private async Task<FornecedorDTO> ObterFornecedorEndereco(Guid id)
+        {
+            return _mapper.Map<FornecedorDTO>(await _fornecedorRepository.ObterFornecedorEndereco(id));
 
         }
     }

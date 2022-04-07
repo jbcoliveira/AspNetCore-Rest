@@ -49,7 +49,7 @@ namespace Joao.Api.V1.Controllers
             return ProdutoDTO;
         }
 
-        
+        [HttpPost]
         public async Task<ActionResult<ProdutoDTO>> Adicionar(ProdutoDTO ProdutoDTO)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
