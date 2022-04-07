@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Joao.Api.Extensions;
+using Joao.API.Controllers;
 using Joao.API.DTO;
 using Joao.Business.Intefaces;
 using Joao.Business.Models;
@@ -9,10 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Joao.API.Controllers
+namespace Joao.Api.V1.Controllers
 {
-
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class FornecedoresController : MainController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
@@ -35,7 +36,7 @@ namespace Joao.API.Controllers
 
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public async Task<IEnumerable<FornecedorDTO>> ObterTodos()
         {
             return _mapper.Map<IEnumerable<FornecedorDTO>>(await _fornecedorRepository.ObterTodos());
