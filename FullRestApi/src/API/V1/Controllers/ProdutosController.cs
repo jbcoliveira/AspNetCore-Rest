@@ -7,6 +7,7 @@ using Joao.API.Controllers;
 using Joao.API.DTO;
 using Joao.Business.Intefaces;
 using Joao.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +34,7 @@ namespace Joao.Api.V1.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IEnumerable<ProdutoDTO>> ObterTodos()
         {
@@ -49,6 +51,8 @@ namespace Joao.Api.V1.Controllers
             return ProdutoDTO;
         }
 
+
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<ProdutoDTO>> Adicionar(ProdutoDTO ProdutoDTO)
         {
@@ -66,7 +70,7 @@ namespace Joao.Api.V1.Controllers
             return CustomResponse(ProdutoDTO);
         }
 
-
+        [Authorize]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Atualizar(Guid id, ProdutoDTO ProdutoDTO)
         {
@@ -101,6 +105,7 @@ namespace Joao.Api.V1.Controllers
             return CustomResponse(ProdutoDTO);
         }
 
+        [Authorize]
         [HttpPost("Adicionar")]
         public async Task<ActionResult<ProdutoDTO>> AdicionarAlternativo(ProdutoImagemDTO ProdutoDTO)
         {
@@ -118,7 +123,7 @@ namespace Joao.Api.V1.Controllers
             return CustomResponse(ProdutoDTO);
         }
 
-
+        [Authorize]
         [RequestSizeLimit(40000000)]
         //[DisableRequestSizeLimit]
         [HttpPost("imagem")]
@@ -127,7 +132,7 @@ namespace Joao.Api.V1.Controllers
             return Ok(file);
         }
 
-
+        [Authorize]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<ProdutoDTO>> Excluir(Guid id)
         {

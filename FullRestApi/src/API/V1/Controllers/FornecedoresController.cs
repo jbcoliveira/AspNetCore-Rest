@@ -34,7 +34,7 @@ namespace Joao.Api.V1.Controllers
             _enderecoRepository = enderecoRepository;
         }
 
-        //[Authorize]  
+        [Authorize]  
         [HttpGet]
         public async Task<IEnumerable<FornecedorDTO>> ObterTodos()
         {
