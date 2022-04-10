@@ -56,7 +56,7 @@ namespace Joao.API
             app.UseMvcConfiguration();
 
 
-            app.UseSwaggerConfig(provider);  
+            app.UseSwaggerConfig(provider, env);  
         }
     }
 }

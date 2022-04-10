@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,9 +41,11 @@ namespace Joao.Api.Configuration
             return services;
         }
 
-        public static IApplicationBuilder UseSwaggerConfig(this IApplicationBuilder app, IApiVersionDescriptionProvider provider)
+        public static IApplicationBuilder UseSwaggerConfig(this IApplicationBuilder app, IApiVersionDescriptionProvider provider, IHostingEnvironment hostingEnvironment)
         {
-            //app.UseMiddleware<SwaggerAuthorizedMiddleware>();
+            //Deve ficar em primeiro lugar
+            app.UseMiddleware<SwaggerAuthorizedMiddleware>();
+
             app.UseSwagger();
             app.UseSwaggerUI(
                 options =>
@@ -126,18 +129,23 @@ namespace Joao.Api.Configuration
     public class SwaggerAuthorizedMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public SwaggerAuthorizedMiddleware(RequestDelegate next)
+        public SwaggerAuthorizedMiddleware(RequestDelegate next, IHostingEnvironment hostingEnvironment)
         {
             _next = next;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public async Task Invoke(HttpContext context)
-        {
+        {            
+
             if (context.Request.Path.StartsWithSegments("/swagger")
-                && !context.User.Identity.IsAuthenticated)
+                && !context.User.Identity.IsAuthenticated && !_hostingEnvironment.IsDevelopment())
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+                //Pode-se redirecionar para uma tela de login
                 return;
             }
 
